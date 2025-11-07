@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Autenticación JWT</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Autenticación JWT</h1>
+            <p>Demostración de autenticación con JSON Web Tokens</p>
+        </header>
+
+        <!-- Indicador de pasos -->
+        <div class="steps-indicator">
+            <div class="step" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-label">Registrarse</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-label">Iniciar Sesión</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-label">Ver Perfil</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('register')">Paso 1: Registro</button>
+            <button class="tab-button" onclick="showTab('login')">Paso 2: Iniciar Sesión</button>
+            <button class="tab-button" onclick="showTab('profile')">Paso 3: Perfil</button>
+        </div>
+
+        <div id="register-tab" class="tab-content active">
+            <div class="instructions">
+                <h2>Paso 1: Registro de Usuario</h2>
+                <p class="instruction-text">Crea una cuenta nueva ingresando tu email y contraseña. Esto guardará tu usuario en el sistema.</p>
+            </div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-email">Email:</label>
+                    <input type="email" id="register-email" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Contraseña:</label>
+                    <input type="password" id="register-password" placeholder="Ingresa tu contraseña" required>
+                </div>
+                <button type="submit">Registrarse</button>
+            </form>
+            <div id="register-message" class="message"></div>
+            <div class="next-step-hint" id="register-next">
+                <p>✓ Registro exitoso. Ahora ve al <strong>Paso 2: Iniciar Sesión</strong> para obtener tu token JWT.</p>
+            </div>
+        </div>
+
+        <div id="login-tab" class="tab-content">
+            <div class="instructions">
+                <h2>Paso 2: Iniciar Sesión</h2>
+                <p class="instruction-text">Ingresa tus credenciales para autenticarte. Al iniciar sesión correctamente, recibirás un <strong>Token JWT</strong> que se mostrará abajo.</p>
+            </div>
+            <div class="test-credentials">
+                <p><strong>Usuario de prueba disponible:</strong></p>
+                <p>Email: <code>test@example.com</code> | Password: <code>test123</code></p>
+                <button type="button" onclick="fillTestCredentials()" class="test-btn">Usar credenciales de prueba</button>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña:</label>
+                    <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
+                </div>
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+            <div id="login-message" class="message"></div>
+            <div class="next-step-hint" id="login-next">
+                <p>✓ Inicio de sesión exitoso. Tu token JWT aparece abajo. Ahora puedes ir al <strong>Paso 3: Perfil</strong> para ver tu información.</p>
+            </div>
+        </div>
+
+        <div id="profile-tab" class="tab-content">
+            <div class="instructions">
+                <h2>Paso 3: Perfil del Usuario</h2>
+                <p class="instruction-text">Esta es una ruta protegida. Solo puedes acceder si tienes un token JWT válido. Haz clic en el botón para cargar tu perfil.</p>
+            </div>
+            <button onclick="loadProfile()" class="profile-btn">Cargar Mi Perfil</button>
+            <div id="profile-message" class="message"></div>
+            <div id="profile-info" class="profile-info"></div>
+        </div>
+
+        <!-- Token Display Mejorado -->
+        <div id="token-display" class="token-display">
+            <div class="token-header">
+                <h3>Token JWT</h3>
+                <span id="token-status" class="token-status">Sin token</span>
+            </div>
+            <div class="token-explanation">
+                <p>Este es tu token de autenticación. Se genera automáticamente al iniciar sesión y se usa para acceder a rutas protegidas.</p>
+            </div>
+            <div id="token-content" class="token-content">
+                <p class="no-token">No hay token almacenado. Inicia sesión para obtener uno.</p>
+            </div>
+            <div class="token-actions">
+                <button onclick="copyToken()" id="copy-btn" class="copy-btn" disabled>Copiar Token</button>
+                <button onclick="clearToken()" id="clear-btn" class="clear-btn" disabled>Limpiar Token</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-name">
+                    <h3>Magdalena Inalaf</h3>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/MagdaIG" target="_blank" class="footer-link">
+                        <span class="footer-label">GitHub:</span>
+                        <span class="footer-value">@MagdaIG</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/minalaf/" target="_blank" class="footer-link">
+                        <span class="footer-label">LinkedIn:</span>
+                        <span class="footer-value">@minalaf</span>
+                    </a>
+                    <a href="https://inalaf.ca/" target="_blank" class="footer-link">
+                        <span class="footer-label">Página web:</span>
+                        <span class="footer-value">@inalaf.ca</span>
+                    </a>
+                    <a href="mailto:magda.inalaf@gmail.com" class="footer-link">
+                        <span class="footer-label">Mail:</span>
+                        <span class="footer-value">magda.inalaf@gmail.com</span>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
